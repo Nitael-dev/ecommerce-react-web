@@ -17,10 +17,10 @@ export function NavBar() {
         </div>
         <div className="navbar-auth">
           <div className="navbar-auth-links">
-            <Link to="/auth" className="btn btn-secondary">
+            <Link to="/auth#login" className="btn btn-secondary">
               Login
             </Link>
-            <Link to="/auth" className="btn btn-primary">
+            <Link to="/auth#signup" className="btn btn-primary">
               Signup
             </Link>
           </div>
