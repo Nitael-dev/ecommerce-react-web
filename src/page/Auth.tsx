@@ -127,7 +127,7 @@ export function Auth() {
               <input
                 className="form-input"
                 id="password"
-                type="Password"
+                type="password"
                 {...register("password", {
                   minLength: {
                     message: "Password must be at least 6 characters",
@@ -137,7 +137,7 @@ export function Auth() {
                     message: "Password mus be at less than 12 characters",
                     value: 12,
                   },
-                  required: "Email is required",
+                  required: "Password is required",
                 })}
               />
               {errors.password && (

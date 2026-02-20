@@ -12,3 +12,16 @@ export async function getProducts() {
     console.log(error);
   }
 }
+
+export async function getProductById(id: string) {
+  try {
+    const data = await customFetch<ProductProps>({
+      url: "products",
+      method: "GET",
+      id,
+    });
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}

@@ -1,6 +1,9 @@
 import { Link } from "react-router";
+import { useAuth } from "../context/AuthContext";
 
 export function NavBar() {
+  const { user, logout } = useAuth();
+
   return (
     <div className="navbar">
       <div className="navbar-container">
@@ -16,14 +19,28 @@ export function NavBar() {
           </Link>
         </div>
         <div className="navbar-auth">
-          <div className="navbar-auth-links">
-            <Link to="/auth#login" className="btn btn-secondary">
-              Login
-            </Link>
-            <Link to="/auth#signup" className="btn btn-primary">
-              Signup
-            </Link>
-          </div>
+          {!user ? (
+            <div className="navbar-auth-links">
+              <Link to="/auth#login" className="btn btn-secondary">
+                Login
+              </Link>
+              <Link to="/auth#signup" className="btn btn-primary">
+                Signup
+              </Link>
+            </div>
+          ) : (
+            <div className="navbar-user">
+              <div className="navbar-greeting">Hello, {user.email}</div>
+              <button
+                className="btn btn-secondary"
+                onClick={() => {
+                  logout();
+                }}
+              >
+                Logout
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

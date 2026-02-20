@@ -3,7 +3,7 @@ import { getProducts } from "../services/products";
 import { ProductCard } from "../components/ProductCard";
 
 export function Home() {
-  const { data, isPending } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
   });
@@ -19,7 +19,7 @@ export function Home() {
       <div className="container">
         <h2 className="page-title">Our Products</h2>
         <div className="product-grid">
-          {isPending ? (
+          {isLoading && data ? (
             <></>
           ) : (
             data?.map((product) => (
