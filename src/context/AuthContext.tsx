@@ -1,11 +1,18 @@
 import { createContext, useContext } from "react";
-import type { RecommCookiesProps, UserProps } from "../interfaces/user";
+import type {
+  CartProps,
+  RecommCookiesProps,
+  UserProps,
+} from "../interfaces/user";
 import { useCookies } from "react-cookie";
+import { useTempCart } from "../hook/tempCart";
 
 interface AuthContextProps {
   user?: UserProps;
   fetchUser(currentUser: UserProps): void;
   logout(): void;
+  tempCart: CartProps[];
+  setTempCart(productId: string): void;
 }
 
 const AuthContext = createContext({} as AuthContextProps);
@@ -15,10 +22,16 @@ export function AuthContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [{ "recomm:user": user }, setCookie, removeCookie] = useCookies<
+  const [
+    { "recomm:user": user, "recomm:tempCart": tempCart },
+    setCookie,
+    removeCookie,
+  ] = useCookies<"recomm:user" | "recomm:tempCart", RecommCookiesProps>([
     "recomm:user",
-    RecommCookiesProps
-  >(["recomm:user"]);
+    "recomm:tempCart",
+  ]);
+
+  const [cart, setCart] = useTempCart(tempCart || [], setCookie);
 
   async function fetchUser(currentUser: UserProps) {
     setCookie("recomm:user", currentUser);
@@ -26,6 +39,7 @@ export function AuthContextProvider({
 
   async function logout() {
     removeCookie("recomm:user");
+    removeCookie("recomm:tempCart");
   }
 
   return (
@@ -34,6 +48,8 @@ export function AuthContextProvider({
         user,
         fetchUser,
         logout,
+        tempCart: cart,
+        setTempCart: setCart,
       }}
     >
       {children}

@@ -1,8 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "../services/products";
 import { ProductCard } from "../components/ProductCard";
+import { useAuth } from "../context/AuthContext";
+import { handleCart } from "../utils/cart";
 
 export function Home() {
+  const { user, setTempCart, tempCart, fetchUser } = useAuth();
+
   const { data, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
@@ -23,7 +27,23 @@ export function Home() {
             <></>
           ) : (
             data?.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard
+                quantity={
+                  user
+                    ? user.cart.find(({ id }) => id === product.id)?.quantity
+                    : tempCart.find(({ id }) => id === product.id)?.quantity
+                }
+                action={() =>
+                  handleCart({
+                    product,
+                    fetchUser,
+                    setTempCart,
+                    user,
+                  })
+                }
+                key={product.id}
+                product={product}
+              />
             ))
           )}
         </div>

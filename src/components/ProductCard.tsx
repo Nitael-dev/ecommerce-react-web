@@ -3,10 +3,14 @@ import type { ProductProps } from "../interfaces/products";
 
 interface CardProps {
   product: ProductProps;
+  action(): void;
+  quantity?: number;
 }
 
 export function ProductCard({
   product: { id, image, name, price },
+  action,
+  quantity,
 }: CardProps) {
   return (
     <div className="product-card">
@@ -18,7 +22,10 @@ export function ProductCard({
           <Link to={`/products/${id}`} className="btn btn-secondary">
             View Details
           </Link>
-          <button className="btn btn-primary">Add to Cart</button>
+          <button onClick={() => action()} className="btn btn-primary">
+            Add to Cart
+            {quantity ? ` (${quantity})` : ""}
+          </button>
         </div>
       </div>
     </div>
