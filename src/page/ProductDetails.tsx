@@ -1,18 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
 import { getProductById } from "../services/products";
 import { useParams } from "react-router";
+import { useAuth } from "../context/AuthContext";
+import { handleCart } from "../utils/cart";
 
 export function ProductDetails() {
+  const { tempCart, user, setTempCart, fetchUser } = useAuth();
   const { productId } = useParams();
 
   const { data: product } = useQuery({
     queryKey: ["productsById", productId],
     queryFn: () => getProductById(productId!),
+    enabled: !!productId,
   });
 
-  if (!product || productId !== product.id) {
+  if (!product) {
     return <h1>Loading...</h1>;
   }
+
+  const currentQuantity = user
+    ? user.cart.find(({ id }) => id === product.id)?.quantity
+    : tempCart.find(({ id }) => id === product.id)?.quantity;
 
   return (
     <div className="page">
@@ -25,7 +33,20 @@ export function ProductDetails() {
             <h1 className="product-detail-name">{product.name}</h1>
             <p className="product-detail-price">${product.price}</p>
             <p className="product-detail-description">{product.description}</p>
-            <button className="btn btn-primary">Add to Cart</button>
+            <button
+              onClick={() =>
+                handleCart({
+                  fetchUser,
+                  product,
+                  setTempCart,
+                  user,
+                })
+              }
+              className="btn btn-primary"
+            >
+              Add to Cart
+              {currentQuantity ? ` (${currentQuantity})` : ""}
+            </button>
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, useLocation } from "react-router";
 import { useState } from "react";
+import type { CartProps } from "../interfaces/user";
 
 type FormValues = {
   email: string;
@@ -16,7 +17,7 @@ interface ResolveProps {
 }
 
 export function Auth() {
-  const { fetchUser, user } = useAuth();
+  const { fetchUser, user, tempCart } = useAuth();
   const navigate = useNavigate();
   const { hash } = useLocation();
 
@@ -58,7 +59,10 @@ export function Auth() {
         });
         if (currentUser) {
           reset();
-          fetchUser(currentUser);
+          fetchUser({
+            ...currentUser,
+            cart: tempCart,
+          });
           setResolve({
             type: "success",
             message: "User registered with success!",
@@ -67,7 +71,24 @@ export function Auth() {
         }
       } else {
         if (match) {
-          fetchUser(match);
+          fetchUser({
+            ...match,
+            cart: Array.from(
+              [...match.cart, ...tempCart]
+                .reduce((acc, item) => {
+                  const existing = acc.get(item.id);
+
+                  if (existing) {
+                    existing.quantity += item.quantity;
+                  } else {
+                    acc.set(item.id, { ...item });
+                  }
+
+                  return acc;
+                }, new Map<string, CartProps>())
+                .values(),
+            ),
+          });
           setResolve({
             type: "success",
             message: "User logged with success!",

@@ -6,7 +6,7 @@ export async function createUser(body: UserDTO) {
     const data = await customFetch<UserProps>({
       url: "user",
       method: "POST",
-      body: JSON.stringify(body),
+      body: JSON.stringify({ ...body, cart: [] }),
     });
     return data;
   } catch (error) {
