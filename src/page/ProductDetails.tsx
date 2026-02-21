@@ -6,12 +6,11 @@ export function ProductDetails() {
   const { productId } = useParams();
 
   const { data: product } = useQuery({
-    queryKey: ["productsById"],
+    queryKey: ["productsById", productId],
     queryFn: () => getProductById(productId!),
-    enabled: !!productId,
   });
 
-  if (!product) {
+  if (!product || productId !== product.id) {
     return <h1>Loading...</h1>;
   }
 
@@ -22,7 +21,7 @@ export function ProductDetails() {
           <div className="product-detail-image">
             <img src={product.image} alt={product.name} />
           </div>
-          <div className="product-detaul-content">
+          <div className="product-detail-content">
             <h1 className="product-detail-name">{product.name}</h1>
             <p className="product-detail-price">${product.price}</p>
             <p className="product-detail-description">{product.description}</p>

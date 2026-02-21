@@ -15,6 +15,7 @@ export async function getProducts() {
 
 export async function getProductById(id: string) {
   try {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     const data = await customFetch<ProductProps>({
       url: "products",
       method: "GET",

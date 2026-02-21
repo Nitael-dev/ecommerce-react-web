@@ -15,7 +15,7 @@ export function ProductCard({
         <h3 className="product-card-name">{name}</h3>
         <p className="product-card-price">${price}</p>
         <div className="product-card-actions">
-          <Link to={`products/${id}`} className="btn btn-secondary">
+          <Link to={`/products/${id}`} className="btn btn-secondary">
             View Details
           </Link>
           <button className="btn btn-primary">Add to Cart</button>
