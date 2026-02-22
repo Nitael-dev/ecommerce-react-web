@@ -1,11 +1,11 @@
-import type { CartProps } from "../interfaces/user";
+import type { CartOptions, CartProps } from "../interfaces/user";
 
 export function useTempCart(
   cart: CartProps[],
   set: (name: "recomm:tempCart", value: CartProps[]) => void,
-): [CartProps[], (productId: string) => void] {
+): [CartProps[], (productId: string, type: CartOptions) => void] {
   let tempCart: CartProps[] = cart || [];
-  function handleCart(productId: string) {
+  function handleCart(productId: string, type: CartOptions) {
     if (!cart) {
       set("recomm:tempCart", [
         {
@@ -15,15 +15,30 @@ export function useTempCart(
       ]);
     } else {
       if (cart.find(({ id }) => id === productId)) {
-        tempCart = cart.map(({ id, quantity }) => {
-          if (id === productId) {
-            return {
-              id,
-              quantity: quantity + 1,
-            };
-          }
-          return { id, quantity };
-        });
+        if (
+          type === "remove" ||
+          (type === "minus" &&
+            cart.find(({ id }) => id === productId)?.quantity === 1)
+        ) {
+          tempCart = cart.filter(({ id, quantity }) => {
+            if (id === productId) {
+              return undefined;
+            } else {
+              return { id, quantity };
+            }
+          });
+        } else {
+          tempCart = cart.map(({ id, quantity }) => {
+            if (id === productId) {
+              return {
+                id,
+                quantity: quantity + (type === "minus" ? -1 : +1),
+              };
+            }
+            return { id, quantity };
+          });
+        }
+        console.log(tempCart);
         set("recomm:tempCart", tempCart);
       } else {
         tempCart.push({ id: productId, quantity: 1 });

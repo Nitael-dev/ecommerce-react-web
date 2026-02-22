@@ -1,5 +1,6 @@
 import { createContext, useContext } from "react";
 import type {
+  CartOptions,
   CartProps,
   RecommCookiesProps,
   UserProps,
@@ -12,7 +13,7 @@ interface AuthContextProps {
   fetchUser(currentUser: UserProps): void;
   logout(): void;
   tempCart: CartProps[];
-  setTempCart(productId: string): void;
+  setTempCart(productId: string, type: CartOptions): void;
 }
 
 const AuthContext = createContext({} as AuthContextProps);

@@ -24,15 +24,14 @@ export async function addToCart({ user, productId }: AddToCartProps) {
       };
 
       const response = await customFetch<UserProps>({
-        url: "user",
+        url: `user/${newUser.id}`,
         method: "PUT",
         body: JSON.stringify(newUser),
-        id: newUser.id,
       });
       return response;
     } else {
       const response = await customFetch<UserProps>({
-        url: "user",
+        url: `user/${user.id}`,
         method: "PUT",
         body: JSON.stringify({
           ...user,
