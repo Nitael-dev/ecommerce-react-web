@@ -70,24 +70,26 @@
       ]
     },
     {
-      "id": "7bf2",
+      "id": "8b44",
       "email": "euamo@porra.com",
+      "password": "12341234",
+      "cart": []
+    },
+    {
+      "id": "63f6",
+      "email": "euamo@porra.com.br",
       "password": "12341234",
       "cart": [
         {
+          "id": "2",
+          "quantity": 3
+        },
+        {
           "id": "1",
-          "quantity": 6
+          "quantity": 3
         },
         {
           "id": "3",
-          "quantity": 6
-        },
-        {
-          "id": "2",
-          "quantity": 6
-        },
-        {
-          "id": "6",
           "quantity": 3
         }
       ]

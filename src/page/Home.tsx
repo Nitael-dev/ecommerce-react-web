@@ -39,6 +39,7 @@ export function Home() {
                     fetchUser,
                     setTempCart,
                     user,
+                    type: "plus",
                   })
                 }
                 key={product.id}

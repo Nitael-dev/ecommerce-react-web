@@ -56,6 +56,7 @@ export function Auth() {
         const currentUser = await createUser({
           email: getValues("email"),
           password: getValues("password"),
+          cart: tempCart,
         });
         if (currentUser) {
           reset();

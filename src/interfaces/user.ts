@@ -10,9 +10,12 @@ export interface CartProps {
   quantity: number;
 }
 
+export type CartOptions = "plus" | "minus" | "remove";
+
 export interface UserDTO {
   email: string;
   password: string;
+  cart?: CartProps[];
 }
 
 export interface RecommCookiesProps {

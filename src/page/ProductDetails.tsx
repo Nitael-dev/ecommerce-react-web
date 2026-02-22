@@ -3,6 +3,7 @@ import { getProductById } from "../services/products";
 import { useParams } from "react-router";
 import { useAuth } from "../context/AuthContext";
 import { handleCart } from "../utils/cart";
+import type { ProductProps } from "../interfaces/products";
 
 export function ProductDetails() {
   const { tempCart, user, setTempCart, fetchUser } = useAuth();
@@ -10,7 +11,7 @@ export function ProductDetails() {
 
   const { data: product } = useQuery({
     queryKey: ["productsById", productId],
-    queryFn: () => getProductById(productId!),
+    queryFn: () => getProductById<ProductProps>([productId!]),
     enabled: !!productId,
   });
 
