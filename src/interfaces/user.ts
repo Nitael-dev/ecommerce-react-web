@@ -10,7 +10,7 @@ export interface CartProps {
   quantity: number;
 }
 
-export type CartOptions = "plus" | "minus" | "remove";
+export type CartOptions = "plus" | "minus" | "remove" | "clear";
 
 export interface UserDTO {
   email: string;

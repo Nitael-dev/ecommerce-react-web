@@ -11,7 +11,7 @@ export function ProductDetails() {
 
   const { data: product } = useQuery({
     queryKey: ["productsById", productId],
-    queryFn: () => getProductById<ProductProps>([productId!]),
+    queryFn: () => getProductById<ProductProps>(productId!),
     enabled: !!productId,
   });
 
@@ -41,6 +41,7 @@ export function ProductDetails() {
                   product,
                   setTempCart,
                   user,
+                  type: "plus",
                 })
               }
               className="btn btn-primary"

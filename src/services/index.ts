@@ -13,7 +13,7 @@ export async function customFetch<T>({ url, body, method }: CustomFetchProps) {
     });
     if (!response.ok) {
       const message = await response.text();
-      throw new Error(`Request failer (${response.status}): ${message}`);
+      throw new Error(`Request failed (${response.status}): ${message}`);
     }
     return (await response.json()) as T;
   } catch (error) {

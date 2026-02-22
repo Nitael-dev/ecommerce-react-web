@@ -4,9 +4,12 @@ import { getProductById } from "../services/products";
 import type { ProductProps } from "../interfaces/products";
 import { handleCart } from "../utils/cart";
 import { useMemo } from "react";
+import { useNavigate } from "react-router";
 
 export function Checkout() {
   const { user, tempCart, setTempCart, fetchUser } = useAuth();
+
+  const navigate = useNavigate();
 
   const productsId = useMemo(
     () => (user ? user.cart.map(({ id }) => id) : tempCart.map(({ id }) => id)),
@@ -18,6 +21,35 @@ export function Checkout() {
     queryFn: () => getProductById<ProductProps[]>(productsId),
     enabled: !!productsId && productsId.length !== 0,
   });
+
+  function currentQuantity(productId: string) {
+    return (
+      (user
+        ? user.cart.find(({ id }) => id === productId)?.quantity
+        : tempCart.find(({ id }) => id === productId)?.quantity) || 0
+    );
+  }
+
+  function placeOrder() {
+    const cartIsEmpty = user ? user.cart.length === 0 : tempCart.length === 0;
+    if (cartIsEmpty) {
+      navigate("/");
+      return;
+    }
+    alert("Successful Order!");
+    if (user) {
+      fetchUser({ ...user, cart: [] });
+    } else {
+      setTempCart("", "clear");
+    }
+    navigate("/");
+  }
+
+  const total =
+    data?.reduce((acc, current) => {
+      acc += current.price * currentQuantity(current.id);
+      return acc;
+    }, 0) ?? 0;
 
   return (
     <div className="page">
@@ -32,12 +64,6 @@ export function Checkout() {
               <div className="home-subtitle">Your cart is empty!</div>
             ) : (
               data?.map((product) => {
-                const currentQuantity =
-                  (user
-                    ? user.cart.find(({ id }) => id === product.id)?.quantity
-                    : tempCart.find(({ id }) => id === product.id)?.quantity) ||
-                  0;
-
                 return (
                   <div key={product.id} className="checkout-item">
                     <img
@@ -68,7 +94,7 @@ export function Checkout() {
                           -
                         </button>
                         <span className="quantity-value">
-                          {currentQuantity}
+                          {currentQuantity(product.id)}
                         </span>
                         <button
                           onClick={() => {
@@ -86,7 +112,10 @@ export function Checkout() {
                         </button>
                       </div>
                       <p className="checkout-item-total">
-                        ${(product.price * currentQuantity).toFixed(2)}
+                        $
+                        {(product.price * currentQuantity(product.id)).toFixed(
+                          2,
+                        )}
                       </p>
                       <button
                         onClick={() => {
@@ -107,6 +136,35 @@ export function Checkout() {
                 );
               })
             )}
+          </div>
+          <div className="checkout-summary">
+            <h2 className="checkout-section-title">Total</h2>
+            <div className="checkout-total">
+              <p className="checkout-total-label">Subtotal:</p>
+              {isLoading ? (
+                <p className="checkout-total-value">Calculating...</p>
+              ) : (
+                <p className="checkout-total-value">${total?.toFixed(2)}</p>
+              )}
+            </div>
+            <div className="checkout-total">
+              <p className="checkout-total-label">Total:</p>
+              {isLoading ? (
+                <p className="checkout-total-value checkout-total-final">
+                  Calculating...
+                </p>
+              ) : (
+                <p className="checkout-total-value checkout-total-final">
+                  ${total?.toFixed(2)}
+                </p>
+              )}
+            </div>
+            <button
+              onClick={() => placeOrder()}
+              className="btn btn-primary btn-large btn-block"
+            >
+              Place Order
+            </button>
           </div>
         </div>
       </div>
