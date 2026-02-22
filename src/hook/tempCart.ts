@@ -23,13 +23,7 @@ export function useTempCart(
             (type === "minus" &&
               cart.find(({ id }) => id === productId)?.quantity === 1)
           ) {
-            tempCart = cart.filter(({ id, quantity }) => {
-              if (id === productId) {
-                return undefined;
-              } else {
-                return { id, quantity };
-              }
-            });
+            tempCart = cart.filter(({ id }) => id !== productId);
           } else {
             tempCart = cart.map(({ id, quantity }) => {
               if (id === productId) {
@@ -44,6 +38,7 @@ export function useTempCart(
           set("recomm:tempCart", tempCart);
         } else {
           tempCart.push({ id: productId, quantity: 1 });
+          tempCart = [...tempCart, { id: productId, quantity: 1 }];
           set("recomm:tempCart", tempCart);
         }
       }

@@ -31,7 +31,8 @@ export function Checkout() {
   }
 
   function placeOrder() {
-    if (tempCart.length === 0 || (user && user.cart.length === 0)) {
+    const cartIsEmpty = user ? user.cart.length === 0 : tempCart.length === 0;
+    if (cartIsEmpty) {
       navigate("/");
       return;
     }
