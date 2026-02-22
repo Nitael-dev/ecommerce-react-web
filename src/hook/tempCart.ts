@@ -37,7 +37,6 @@ export function useTempCart(
           }
           set("recomm:tempCart", tempCart);
         } else {
-          tempCart.push({ id: productId, quantity: 1 });
           tempCart = [...tempCart, { id: productId, quantity: 1 }];
           set("recomm:tempCart", tempCart);
         }
